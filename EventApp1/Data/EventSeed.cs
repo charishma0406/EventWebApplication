@@ -9,12 +9,13 @@ namespace EventApp1.Data
 {
     public static class EventSeed
     {
-        //seeding the data into the tables
+        //seeding the data into the tables in the database
         public static void OnSeed(EventContext context)
         {
             //migrating the c# code into the tables
             context.Database.Migrate();
 
+            
             //adding data into the tables only if the data is not available
             if (!context.EventTypes.Any())
             {
