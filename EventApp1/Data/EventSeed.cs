@@ -19,7 +19,7 @@ namespace EventApp1.Data
             if (!context.EventTypes.Any())
             {
                 //add range is like adding data into the tables
-                //my name is cherry
+               
                 context.EventTypes.AddRange(GetPreConfiguredEventType());
                 context.SaveChanges();
             }
