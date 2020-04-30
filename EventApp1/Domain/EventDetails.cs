@@ -20,7 +20,11 @@ namespace EventApp1.Domain
 
         //creating prop for event type id for use of foriegn key
         public virtual int EventTypeId { get; set; }
+
+        public virtual int EventLocationId { get; set; }
         //navigational property
         public virtual EventType EventType { get; set; }
+
+        public virtual EventLocations EventLocation { get; set; }
     }
 }

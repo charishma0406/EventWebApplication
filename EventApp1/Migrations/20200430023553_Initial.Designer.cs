@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventApp1.Migrations
 {
     [DbContext(typeof(EventContext))]
-    [Migration("20200406012129_Initial")]
+    [Migration("20200430023553_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,6 +19,7 @@ namespace EventApp1.Migrations
                 .HasAnnotation("ProductVersion", "3.1.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("Relational:Sequence:.Event_Details_hilo", "'Event_Details_hilo', '', '1', '10', '', '', 'Int64', 'False'")
+                .HasAnnotation("Relational:Sequence:.Event_Location_hilo", "'Event_Location_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("Relational:Sequence:.Event_Type_hilo", "'Event_Type_hilo', '', '1', '10', '', '', 'Int64', 'False'")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -42,6 +43,9 @@ namespace EventApp1.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EventLocationId")
+                        .HasColumnType("int");
 
                     b.Property<int>("EventTypeId")
                         .HasColumnType("int");
@@ -67,9 +71,29 @@ namespace EventApp1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("EventLocationId");
+
                     b.HasIndex("EventTypeId");
 
                     b.ToTable("Event_Details");
+                });
+
+            modelBuilder.Entity("EventApp1.Domain.EventLocations", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:HiLoSequenceName", "Event_Location_hilo")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.SequenceHiLo);
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(100)")
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EventLocations");
                 });
 
             modelBuilder.Entity("EventApp1.Domain.EventType", b =>
@@ -92,6 +116,12 @@ namespace EventApp1.Migrations
 
             modelBuilder.Entity("EventApp1.Domain.EventDetails", b =>
                 {
+                    b.HasOne("EventApp1.Domain.EventLocations", "EventLocation")
+                        .WithMany()
+                        .HasForeignKey("EventLocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("EventApp1.Domain.EventType", "EventType")
                         .WithMany()
                         .HasForeignKey("EventTypeId")

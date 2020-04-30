@@ -32,7 +32,7 @@ services:
       ACCEPT_EULA: Y
       SA_PASSWORD: EventApp(!)
     ports:
-      - "1548:1433"
+      - "1648:1433"
     container_name: eventsqlserver
     networks:
       - backend

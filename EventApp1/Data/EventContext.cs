@@ -20,6 +20,7 @@ namespace EventApp1.Data
         // what to be converted into tables the data the properties we wrote should be converted into tables
         //dbset is the name for the database table.
         public DbSet<EventType> EventTypes { get; set; }
+        public DbSet<EventLocations> EventLocations { get; set; }
         public DbSet<EventDetails> Event_Details { get; set; }
 
         //model builder is creating our tables,we need to tell model builder how to create the tables. 
@@ -35,6 +36,20 @@ namespace EventApp1.Data
                 .UseHiLo("Event_Type_hilo");
                 //type prop
                 e.Property(t => t.Type)
+                .IsRequired()
+                .HasMaxLength(100);
+            });
+
+            //for location
+            modelBuilder.Entity<EventLocations>(e =>
+            {
+                //id prop
+                e.ToTable("EventLocations");
+                e.Property(t => t.Id)
+                .IsRequired()
+                .UseHiLo("Event_Location_hilo");
+                //type prop
+                e.Property(t => t.Location)
                 .IsRequired()
                 .HasMaxLength(100);
             });

@@ -40,7 +40,7 @@ namespace EventApp1
             //total connection string for sql server
             var connectionstring = $"Server = {server};DataBase = {database};User Id = {user}; Password = {password}";
 
-
+             //var connectionString = Configuration["ConnectionString"];
 
             //adding data base context and giving options method to connect my data base through the configuration
             services.AddDbContext<EventContext>(options => options.UseSqlServer(connectionstring));

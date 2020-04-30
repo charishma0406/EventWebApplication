@@ -1,7 +1,7 @@
 ﻿
 @{
     ViewData["Title"] = "Catalog";
-    @model WebMvc.ViewModels.CatalogIndexViewModel
+    @model WebMVC.ViewModels.CatalogIndexViewModel
 }
 <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="6000">
     <ol class="carousel-indicators">
@@ -50,7 +50,10 @@
 <section class="esh-catalog-filters">
     <div class="container">
         <form asp-action="Index" asp-controller="Catalog" method="post">
-            
+
+            <label class="esh-catalog-label" data-title="Location">
+                <select asp-for="@Model.LocationFilterApplied" asp-items="@Model.Locations" class="esh-catalog-filter"></select>
+            </label>
             <label class="esh-catalog-label" data-title="type">
                 <select asp-for="@Model.TypesFilterApplied" asp-items="@Model.Types" class="esh-catalog-filter"></select>
             </label>
@@ -64,10 +67,10 @@
         @Html.Partial("_pagination", Model.PaginationInfo)
 
         <div class="esh-catalog-items row">
-            @foreach (var catalogItem in Model.EventDetails)
+            @foreach (var eventdetails in Model.EventDetails)
             {
                 <div class="esh-catalog-item col-md-4">
-                    @Html.Partial("_product", catalogItem)
+                    @Html.Partial("_product", eventdetails)
                 </div>
             }
         </div>
