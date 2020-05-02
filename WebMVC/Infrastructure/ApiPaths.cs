@@ -15,9 +15,33 @@ namespace WebMVC.Infrastructure
 
             //we are giving the base uri because it should know the which local host and which port it is using and that port it will take
             //we are giving the page size(page) , page index(take)how many pages to take, which type , which brand to take.
-            public static string GetAllEventCatalogItems(string baseUri, int page, int take)
+            public static string GetAllEventCatalogItems(string baseUri, int page, int take, int?location, int?type)
             {
-                return $"{baseUri}/Details?pageIndex={page}&pageSize={take}";
+                var filterQs = string.Empty;
+                if(location.HasValue || type.HasValue)
+                {
+                    var locationQs = (location.HasValue) ? location.Value.ToString() : "null";
+
+                    var typesQS = (type.HasValue) ? type.Value.ToString() : "null";
+                    filterQs = $"/location/{locationQs}/type/{typesQS}";
+                }
+
+
+
+
+                return $"{baseUri}/Details{filterQs}?pageIndex={page}&pageSize={take}";
+            }
+
+
+
+            public static string GettAllLocations(string baseUri)
+            {
+                return $"{baseUri}/eventlocations";
+            }
+
+            public static string GetAllTypes(string baseUri)
+            {
+                return $"{baseUri}/eventtypes";
             }
         }
     }

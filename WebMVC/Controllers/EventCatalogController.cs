@@ -17,11 +17,11 @@ namespace WebMVC.Controllers
             _service = service;
         }
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(int? page, int? locationFilteredApplied, int? typesFilteredApplied)
         {
             var itemsOnpage = 10;
 
-            var EventCatalog = await _service.GetEventCatalogItems(page?? 0, itemsOnpage);
+            var EventCatalog = await _service.GetEventCatalogItems(page?? 0, itemsOnpage, locationFilteredApplied, typesFilteredApplied);
             var vm = new CatalogIndexViewModel
             {
                 EventDetails = EventCatalog.Data,
@@ -31,7 +31,13 @@ namespace WebMVC.Controllers
                     ItemsPerPage = itemsOnpage,
                     TotalItems = EventCatalog.Count,
                     TotalPages = (int)Math.Ceiling((decimal)EventCatalog.Count / itemsOnpage)
-                }
+                },
+
+                Locations = await _service.GetLocationAsync(),
+                Types = await _service.GetTypesAsync(),
+
+                LocationFilterApplied = locationFilteredApplied ?? 0,
+                TypesFilterApplied = typesFilteredApplied ?? 0
             };
 
             return View(vm);

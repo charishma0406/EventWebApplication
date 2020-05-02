@@ -56,8 +56,49 @@ namespace EventApp1.Controllers
             //model pg siz, pg ind,count of pg and data will be available
             return Ok(model);
 
+        }
+
+        [HttpGet]
+        [Route("[action]/location/{eventlocationId}/type/{eventtypeId}")]
+        public async Task<IActionResult> Details(int? eventlocationId, int? eventtypeId, [FromQuery]int PageIndex = 0 ,[FromQuery] int pageSize = 6)
+        {
+            var root = (IQueryable<EventDetails>)_context.Event_Details;
+
+           if(eventlocationId.HasValue)
+            {
+                root = root.Where(c => c.EventLocationId == eventlocationId);
+            }
+
+           if(eventtypeId.HasValue)
+            {
+                root = root.Where(c => c.EventTypeId == eventtypeId);
+            }
+
+            var itemsCount = await root.LongCountAsync();
+            var items = await root
+                .OrderBy(c => c.Name)
+                .Skip(PageIndex * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+            items = ChangePictureUrl(items);
+
+            var model = new PaginatedDetailsViewModel<EventDetails>
+            { PageIndex = PageIndex,
+              PageSize = pageSize,
+              Count = itemsCount,
+              Data = items
+            };
+            return Ok(model);
+
+
+
+
 
         }
+
+
+
+
         //for changing the pictuire url we are creating this method
         private List<EventDetails> ChangePictureUrl(List<EventDetails> items)
         {
@@ -69,7 +110,22 @@ namespace EventApp1.Controllers
         }
 
         
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> EventLocations()
+        {
+            var items = await _context.EventLocations.ToListAsync();
+            return Ok(items);
+        }
 
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> EventTypes()
+        {
+            var items = await _context.EventTypes.ToListAsync();
+            return Ok(items);
+        }
 
     }
 }
