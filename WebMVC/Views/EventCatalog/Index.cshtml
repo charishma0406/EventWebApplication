@@ -12,7 +12,7 @@
     </ol>
     <div class="carousel-inner" role="listbox">
         <div class="item active">
-            <img src="~/images/banner.png" alt="ASP.NET" class="img-responsive" />
+            <img src="~/images/yoga.jpeg" alt="ASP.NET" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
                     If you can DREAM it, you can DO it.
@@ -20,7 +20,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banner-2.png" alt="Visual Studio" class="img-responsive" />
+            <img src="~/images/online.jpg" alt="Visual Studio" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
                     Break the rules to find a better YOU!
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="item">
-            <img src="~/images/banner-3.png" alt="Package Management" class="img-responsive" />
+            <img src="~/images/show.png" alt="Package Management" class="img-responsive" />
             <div class="carousel-caption" role="option">
                 <p>
                     Music is an out burst of the soul.
@@ -49,7 +49,7 @@
 
 <section class="esh-catalog-filters">
     <div class="container">
-        <form asp-action="Index" asp-controller="Catalog" method="post">
+        <form asp-action="Index" asp-controller="EventCatalog" method="post">
 
             <label class="esh-catalog-label" data-title="Location">
                 <select asp-for="@Model.LocationFilterApplied" asp-items="@Model.Locations" class="esh-catalog-filter"></select>

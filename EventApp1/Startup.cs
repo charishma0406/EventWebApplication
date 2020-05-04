@@ -44,10 +44,23 @@ namespace EventApp1
 
             //adding data base context and giving options method to connect my data base through the configuration
             services.AddDbContext<EventContext>(options => options.UseSqlServer(connectionstring));
-            
+
+            //adding swagger documentation
+            services.AddSwaggerGen(options=>
+            {
+                options.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Title = "EventsApp - Event Catalog Api"
+                });
+            });
+
 
 
         }
+
+
+
+
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
