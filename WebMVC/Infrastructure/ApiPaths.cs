@@ -7,6 +7,7 @@ namespace WebMVC.Infrastructure
 {
     public class ApiPaths
     {
+
         //we are writing class in the class because for here we are creating all the end points for multiple ones in the future.
         public static class EventCatalog
         {
@@ -42,6 +43,32 @@ namespace WebMVC.Infrastructure
             public static string GetAllTypes(string baseUri)
             {
                 return $"{baseUri}/eventtypes";
+            }
+        }
+
+
+        public static class Basket
+        {
+            //all these methods should match cart in the services
+            //get basket
+            public static string GetBasket(string baseUri, string basketId)
+            {
+                //the baseuri and the id of the basket to get the basket
+                //baseuri is api/cart/get ation in the cart controller services side
+                return $"{baseUri}/{basketId}";
+            }
+
+            //update basket
+            public static string UpdateBasket(string baseUri)
+            {
+                //
+                return baseUri;
+            }
+
+            //delete basket
+            public static string CleanBasket(string baseUri, string basketId)
+            {
+                return $"{baseUri}/{basketId}";
             }
         }
     }

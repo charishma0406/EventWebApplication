@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+
 using System.Linq;
 using System.Threading.Tasks;
-using EventApp1.Data;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +14,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace EventApp1
+using OrderApi.Data;
+
+namespace OrderApi
 {
     public class Startup
     {
@@ -27,7 +31,6 @@ namespace EventApp1
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
             // we changed connection string we took it away and we changed it to the paramaters in the yml file
             //we are defining those here as parameters in startuo so if we run docker then it will take these config
             var server = Configuration["DataBaseServer"];
@@ -40,33 +43,13 @@ namespace EventApp1
             //total connection string for sql server
             var connectionstring = $"Server = {server};DataBase = {database};User Id = {user}; Password = {password}";
 
-             //var connectionString = Configuration["ConnectionString"];
+            //var connectionString = Configuration["ConnectionString"];
 
             //adding data base context and giving options method to connect my data base through the configuration
-            services.AddDbContext<EventContext>(options => options.UseSqlServer(connectionstring));
+            //services.AddDbContext<OrdersContext>(options => options.UseSqlServer(connectionstring));
 
-            //adding swagger documentation
-            services.AddSwaggerGen(options =>
-            {
-                //swagger document it is we can tell what version our application.This is name of our version (V1)
-                options.SwaggerDoc("V1", new Microsoft.OpenApi.Models.OpenApiInfo
-                {
-                    //title of our documentation
-                    Title = "EventsOnContainer - Event Catalog Api",
-                    //this is the actual version
-                    Version = "v1",
-                    //description for my documentation
-                    Description = "Event catalog microservice",
-                });
-            });
-
-
-
+            //ConfigureAuthService(services);
         }
-
-
-
-
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -76,15 +59,11 @@ namespace EventApp1
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHttpsRedirection();
+
             app.UseRouting();
 
             app.UseAuthorization();
-
-            app.UseSwagger().UseSwaggerUI(e =>
-            {
-                //we will show under this url for swagger, version v1 and name for this file as product catalogapi
-                e.SwaggerEndpoint($"/swagger/V1/swagger.json", "ProductCatalogAPI V1");
-            });
 
             app.UseEndpoints(endpoints =>
             {
