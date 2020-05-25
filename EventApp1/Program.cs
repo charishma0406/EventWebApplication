@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
+
 namespace EventApp1
 {
     public class Program
@@ -27,6 +28,7 @@ namespace EventApp1
                 var context = serviceproviders.GetRequiredService<EventContext>();
                 //if my db is available and up and running then call the seed method here.
                 EventSeed.OnSeed(context);
+               
             }
             host.Run();
         }

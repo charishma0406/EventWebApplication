@@ -1,4 +1,5 @@
 ﻿using CartApi.Models;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,5 +20,6 @@ namespace WebMVC.services
         Task<Cart> SetQuantities(ApplicationUser user, Dictionary<string, int> quantities);
         //deleting the cart
         Task ClearCart(ApplicationUser user);
+        Order MapCartToOrder(Cart Cart);
     }
 }

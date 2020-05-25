@@ -41,6 +41,7 @@ namespace OrderApi.Models
             OrderItems = new List<OrderItem>();
         }
     }
+    //this is my orderd status
     public enum OrderStatus
     {
         //is the order preparing

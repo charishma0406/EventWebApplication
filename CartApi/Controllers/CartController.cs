@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CartApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace CartApi.Controllers
 {
@@ -14,10 +15,12 @@ namespace CartApi.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartRepository _repository;
+        private readonly ILogger<CartController> _logger;
 
-        public CartController(ICartRepository repository)
+        public CartController(ICartRepository repository, ILogger<CartController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Cart), (int)HttpStatusCode.OK)]
@@ -32,6 +35,7 @@ namespace CartApi.Controllers
 
         public async Task<IActionResult> Post(Cart value)
         {
+            _logger.LogInformation("Cart updated!");
             var basket = await _repository.UpdateCartAsync(value);
             return Ok(basket);
         }

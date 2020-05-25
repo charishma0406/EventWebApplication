@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Stripe;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,14 @@ namespace WebMVC.services
     {
 
         private readonly IConfiguration _config;
-        private IHttpClient _apiClient;
+        private Infrastructure.IHttpClient _apiClient;
         private readonly string _remoteServiceBaseUrl;
         private IHttpContextAccessor _httpContextAccesor;
         private readonly ILogger _logger;
 
         //we are injeceting 3 thing. Ihttpcontext accessor is the to retrive the token from the identity server
         public CartService(IConfiguration config, IHttpContextAccessor httpContextAccesor,
-            IHttpClient httpClient, ILoggerFactory logger)
+            Infrastructure.IHttpClient httpClient, ILoggerFactory logger)
         {
             _config = config;
             //this is the cart accessor
@@ -167,6 +168,9 @@ namespace WebMVC.services
 
         }
 
-        
+        public Order MapCartToOrder(Cart Cart)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

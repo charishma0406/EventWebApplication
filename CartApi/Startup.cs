@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using CartApi.Messaging.Consumers;
 using CartApi.Models;
+using Common.Messaging;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -13,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using RabbitMQ.Client;
 using StackExchange.Redis;
 
 namespace CartApi
@@ -93,7 +97,49 @@ namespace CartApi
                 });
             });
 
+            //this is for messaging
+            //adding configuration to our mass transit
+            services.AddMassTransit(cfg =>
+            {
+                //when I receive a message we need to tell that i am a consumer
+                cfg.AddConsumer<OrderCompletedEventConsumer>();
+                //addinga bus to configuration
+                cfg.AddBus(provider =>
+                {
+                    //creating the rabbit mq. Factory is inbuilt class we are using that to create rabbitmq
+                    return Bus.Factory.CreateUsingRabbitMq(rmq =>
+                    {
+                        //rabbit mq is hosted in "rabbitmq://rabbitmq"
+                        rmq.Host(new Uri("rabbitmq://rabbitmq"), "/", h =>
+                        {
+                            //rabbit mq is created using below username and password
+
+                            h.Username("guest");
+                            h.Password("guest");
+                        });
+
+                        //eventscartapr20 is my queue name
+                        rmq.ReceiveEndpoint("EventscartApr20", e =>
+                        {
+                            //whenever we receive message we need to call that class
+                            e.ConfigureConsumer<OrderCompletedEventConsumer>(provider);
+                        });
+                        
+                        
+                        //here we are going to tell our mesage is fanout msg like publish subscribe model
+                        //fanout to send the messages in distribution manner
+                        rmq.ExchangeType = ExchangeType.Fanout;
+                        //etratiometolive is to stay there our message for a day.
+                        MessageDataDefaults.ExtraTimeToLive = TimeSpan.FromDays(1);
+                    });
+
+                });
+            });
+            //this is the one kicks start our bus. it gets started and running
+            services.AddMassTransitHostedService();
         }
+
+    
 
         private void ConfigureAuthService(IServiceCollection services)
         {
